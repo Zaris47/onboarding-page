@@ -14,16 +14,18 @@ import AddressForm from "./AddressForm";
 import AddressForm2 from "./AddressForm2";
 import PaymentForm from "./PaymentForm";
 import logo from "../assets/logo.png";
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@mui/material/Link";
 
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 // import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 // import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 // import RecommendOutlinedIcon from '@mui/icons-material/RecommendOutlined';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 const steps = ["Account", "Personal", "Billing", "Done"];
 
@@ -38,7 +40,7 @@ function getStepContent(step) {
   switch (step) {
     case 0:
       return <AddressForm />;
-    case 1: 
+    case 1:
       return <AddressForm2 />;
     case 2:
       return <PaymentForm />;
@@ -50,7 +52,7 @@ function getStepContent(step) {
 // const theme = createTheme();
 
 export default function Account() {
-  const isMobile = useMediaQuery('(max-width:600px)'); // set the breakpoint to your preference
+  const isMobile = useMediaQuery("(max-width:600px)"); // set the breakpoint to your preference
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -64,7 +66,6 @@ export default function Account() {
     },
   });
 
-  
   const [activeStep, setActiveStep] = React.useState(0);
 
   const handleNext = () => {
@@ -79,10 +80,10 @@ export default function Account() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Tooltip title="Theme" placement="top-end">
-      <IconButton onClick={handleThemeToggle}>
-      {isDarkMode ? <WbSunnyIcon /> : <DarkModeIcon />}
-      </IconButton>
-    </Tooltip>
+        <IconButton onClick={handleThemeToggle}>
+          {isDarkMode ? <WbSunnyIcon /> : <DarkModeIcon />}
+        </IconButton>
+      </Tooltip>
       <Box
         component="span"
         sx={{
@@ -98,7 +99,11 @@ export default function Account() {
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
-          sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 }, borderRadius: '10px' }}
+          sx={{
+            my: { xs: 3, md: 6 },
+            p: { xs: 2, md: 3 },
+            borderRadius: "10px",
+          }}
         >
           {/* Incase to add icons  */}
           {/* <Stepper alternativeLabel  activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
@@ -111,11 +116,7 @@ export default function Account() {
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
               <Step key={label}>
-                          {isMobile ? (
-            <StepLabel />
-          ) : (
-            <StepLabel>{label}</StepLabel>
-          )}
+                {isMobile ? <StepLabel /> : <StepLabel>{label}</StepLabel>}
               </Step>
             ))}
           </Stepper>
@@ -132,20 +133,31 @@ export default function Account() {
           ) : (
             <React.Fragment>
               {getStepContent(activeStep)}
-              <Box sx={{ display: "flex", justifyContent: "flex-end"}}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                )}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "end",
+                }}
+              >
+                <Link component={RouterLink} to="/" variant="body2">
+                  {"Already have an account? Log in"}
+                </Link>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  {activeStep !== 0 && (
+                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                      Back
+                    </Button>
+                  )}
 
-                <Button
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-                  {activeStep === steps.length - 2 ? "Sign up" : "Next"}
-                </Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    sx={{ mt: 3, ml: 1 }}
+                  >
+                    {activeStep === steps.length - 2 ? "Sign up" : "Next"}
+                  </Button>
+                </Box>
               </Box>
             </React.Fragment>
           )}

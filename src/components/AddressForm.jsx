@@ -5,6 +5,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import InputAdornment from '@mui/material/InputAdornment';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import {auth} from "../config/firebase"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 export default function AddressForm() {
   return (
@@ -13,9 +15,9 @@ export default function AddressForm() {
         <Grid item xs={12} sm={12}>
           <TextField
             
-            id="firstName"
-            name="firstName"
-            label="First name"
+            id="fullName"
+            name="fullName"
+            label="Full name"
             fullWidth
             autoComplete="given-name"
             variant="outlined"

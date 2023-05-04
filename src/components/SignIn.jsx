@@ -18,6 +18,7 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { useState, useRef } from "react";
 import Paper from "@mui/material/Paper";
@@ -32,7 +33,7 @@ function Copyright(props) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="#">
         Your Website
       </Link>{" "}
       {new Date().getFullYear()}
@@ -50,6 +51,7 @@ export default function SignIn() {
   const passwordRef = useRef(null);
 
   // main Auth functions
+  //console.log(auth?.currentUser.email)
 
   const signIn = async () => {
     try {
@@ -68,6 +70,16 @@ export default function SignIn() {
       await signInWithPopup(
         auth,
         googleProvider
+      );
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const logOut = async () => {
+    try {
+      await signOut(
+        auth
       );
     } catch (err) {
       alert(err.message);
@@ -174,6 +186,9 @@ export default function SignIn() {
         >
           <Button variant="outlined" startIcon={<Google />} onClick={signInWithGoogle}>
             Sign in with Google
+          </Button>
+          <Button variant="outlined"  onClick={logOut}>
+            Test Logout Button
           </Button>
         </Grid>
 

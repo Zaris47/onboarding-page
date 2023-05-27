@@ -19,10 +19,14 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  GoogleAuthProvider,
 } from "firebase/auth";
-import { useState, useRef } from "react";
-import Paper from "@mui/material/Paper";
+import {  useEffect, useRef } from "react";
 import { Google } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+
+
 
 function Copyright(props) {
   return (
@@ -44,11 +48,25 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+
+
 export default function SignIn() {
   //States
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+
+  //Routing and if the user exist to go to dashboard
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      // Redirect to another page if user is already logged in
+      navigate("/dashboard"); // Replace "/dashboard" with the desired URL of the page
+    }
+  }, [user, navigate]);
+
 
   // main Auth functions
   //console.log(auth?.currentUser.email)
@@ -65,22 +83,29 @@ export default function SignIn() {
     }
   };
 
-  const signInWithGoogle = async () => {
+  const googleProvider = new GoogleAuthProvider();
+  const googleLogin = async () => {
     try {
-      await signInWithPopup(
-        auth,
-        googleProvider
-      );
-    } catch (err) {
-      alert(err.message);
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log(result.user);
+    } catch (error) {
+      console.log(error);
     }
   };
+  // const signInWithGoogle = async () => {
+  //   try {
+  //     await signInWithPopup(
+  //       auth,
+  //       googleProvider
+  //     );
+  //   } catch (err) {
+  //     alert(err.message);
+  //   }
+  // };
 
   const logOut = async () => {
     try {
-      await signOut(
-        auth
-      );
+      await signOut(auth);
     } catch (err) {
       alert(err.message);
     }
@@ -184,10 +209,14 @@ export default function SignIn() {
             borderRadius: "10px",
           }}
         >
-          <Button variant="outlined" startIcon={<Google />} onClick={signInWithGoogle}>
+          <Button
+            variant="outlined"
+            startIcon={<Google />}
+            onClick={googleLogin}
+          >
             Sign in with Google
           </Button>
-          <Button variant="outlined"  onClick={logOut}>
+          <Button variant="outlined" onClick={logOut}>
             Test Logout Button
           </Button>
         </Grid>

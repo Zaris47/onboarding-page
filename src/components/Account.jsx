@@ -18,6 +18,8 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
+import { useNavigate } from "react-router-dom";
+
 
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 // import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
@@ -53,6 +55,8 @@ function getStepContent(step) {
 
 export default function Account() {
   const isMobile = useMediaQuery("(max-width:600px)"); // set the breakpoint to your preference
+  const navigate = useNavigate();
+
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -129,6 +133,13 @@ export default function Account() {
                 Your account is created. We have emailed you a confirmation,
                 please click on the link to activate your account.
               </Typography>
+              <Button
+                    variant="contained"
+                    onClick={() => navigate("/")}
+                    sx={{ mt: 3, ml: 1 }}
+                  >
+                    Home
+                  </Button>
             </React.Fragment>
           ) : (
             <React.Fragment>

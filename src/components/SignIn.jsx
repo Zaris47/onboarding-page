@@ -13,20 +13,16 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Account from "./Account";
 import { Link as RouterLink } from "react-router-dom";
-import { auth, googleProvider } from "../config/firebase";
+import { auth } from "../config/firebase";
 import {
   signInWithPopup,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
   GoogleAuthProvider,
 } from "firebase/auth";
-import {  useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Google } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-
-
 
 function Copyright(props) {
   return (
@@ -48,8 +44,6 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-
-
 export default function SignIn() {
   //States
 
@@ -67,7 +61,6 @@ export default function SignIn() {
     }
   }, [user, navigate]);
 
-
   // main Auth functions
   //console.log(auth?.currentUser.email)
 
@@ -83,7 +76,9 @@ export default function SignIn() {
     }
   };
 
+  //Creating new provide here, can also create it in firebase config
   const googleProvider = new GoogleAuthProvider();
+
   const googleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -103,19 +98,11 @@ export default function SignIn() {
   //   }
   // };
 
-  const logOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
   // Handling functions
   const handleSubmit = (event) => {
     event.preventDefault();
-    const emailValue = emailRef.current.value;
-    const passwordValue = passwordRef.current.value;
+    // const emailValue = emailRef.current.value;
+    // const passwordValue = passwordRef.current.value;
     signIn();
   };
 
@@ -215,9 +202,6 @@ export default function SignIn() {
             onClick={googleLogin}
           >
             Sign in with Google
-          </Button>
-          <Button variant="outlined" onClick={logOut}>
-            Test Logout Button
           </Button>
         </Grid>
 

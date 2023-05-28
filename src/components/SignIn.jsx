@@ -13,16 +13,16 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Account from "./Account";
 import { Link as RouterLink } from "react-router-dom";
-import { auth, googleProvider } from "../config/firebase";
+import { auth } from "../config/firebase";
 import {
   signInWithPopup,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
+  GoogleAuthProvider,
 } from "firebase/auth";
-import { useState, useRef } from "react";
-import Paper from "@mui/material/Paper";
+import { useEffect, useRef } from "react";
 import { Google } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function Copyright(props) {
   return (
@@ -50,6 +50,17 @@ export default function SignIn() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
 
+  //Routing and if the user exist to go to dashboard
+  const navigate = useNavigate();
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    if (user) {
+      // Redirect to another page if user is already logged in
+      navigate("/dashboard"); // Replace "/dashboard" with the desired URL of the page
+    }
+  }, [user, navigate]);
+
   // main Auth functions
   //console.log(auth?.currentUser.email)
 
@@ -65,32 +76,33 @@ export default function SignIn() {
     }
   };
 
-  const signInWithGoogle = async () => {
-    try {
-      await signInWithPopup(
-        auth,
-        googleProvider
-      );
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+  //Creating new provide here, can also create it in firebase config
+  const googleProvider = new GoogleAuthProvider();
 
-  const logOut = async () => {
+  const googleLogin = async () => {
     try {
-      await signOut(
-        auth
-      );
-    } catch (err) {
-      alert(err.message);
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log(result.user);
+    } catch (error) {
+      console.log(error);
     }
   };
+  // const signInWithGoogle = async () => {
+  //   try {
+  //     await signInWithPopup(
+  //       auth,
+  //       googleProvider
+  //     );
+  //   } catch (err) {
+  //     alert(err.message);
+  //   }
+  // };
 
   // Handling functions
   const handleSubmit = (event) => {
     event.preventDefault();
-    const emailValue = emailRef.current.value;
-    const passwordValue = passwordRef.current.value;
+    // const emailValue = emailRef.current.value;
+    // const passwordValue = passwordRef.current.value;
     signIn();
   };
 
@@ -184,11 +196,12 @@ export default function SignIn() {
             borderRadius: "10px",
           }}
         >
-          <Button variant="outlined" startIcon={<Google />} onClick={signInWithGoogle}>
+          <Button
+            variant="outlined"
+            startIcon={<Google />}
+            onClick={googleLogin}
+          >
             Sign in with Google
-          </Button>
-          <Button variant="outlined"  onClick={logOut}>
-            Test Logout Button
           </Button>
         </Grid>
 

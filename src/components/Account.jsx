@@ -19,37 +19,11 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
-
-
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-// import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
-// import RecommendOutlinedIcon from '@mui/icons-material/RecommendOutlined';
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 const steps = ["Account", "Personal", "Billing", "Done"];
-
-// const iconArray = [
-//   LockOutlinedIcon,
-//   AccountCircleOutlinedIcon,
-//   AttachMoneyOutlinedIcon,
-//   RecommendOutlinedIcon
-// ];
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <AddressForm2 />;
-    case 2:
-      return <PaymentForm />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
 
 // const theme = createTheme();
 
@@ -79,6 +53,20 @@ export default function Account() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <AddressForm  handleNext={handleNext}/>;
+      case 1:
+        return <AddressForm2 />;
+      case 2:
+        return <PaymentForm />;
+      default:
+        throw new Error("Unknown step");
+    }
+  }
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,6 +121,7 @@ export default function Account() {
                 Your account is created. We have emailed you a confirmation,
                 please click on the link to activate your account.
               </Typography>
+              {/* =====================================Make account onClck this button or when step is at last call function and input the others are props and handle here */}
               <Button
                     variant="contained"
                     onClick={() => navigate("/")}

@@ -6,9 +6,33 @@ import Checkbox from "@mui/material/Checkbox";
 import InputAdornment from '@mui/material/InputAdornment';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {auth} from "../config/firebase"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { useRef } from "react";
+import PropTypes from "prop-types";
 
-export default function AddressForm() {
+
+
+export default function AddressForm({ handleNext }) {
+
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const passwordConfirmRef = useRef();
+
+  const handleNextClick = async () => {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+
+    // Create the user account using Firebase
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      // User account created successfully
+      handleNext(); // Call the handleNext function passed as a prop
+    } catch (error) {
+      // Handle any errors during account creation
+      console.error("Error creating user account:", error);
+    }
+  };
+
   return (
     <React.Fragment>
       <Grid container spacing={3}>
@@ -36,6 +60,7 @@ export default function AddressForm() {
             id="email"
             name="email"
             label="Email"
+            inputRef={emailRef}
             fullWidth
             variant="outlined"
             helperText="Please input a real Email Address"
@@ -55,6 +80,7 @@ export default function AddressForm() {
             id="password"
             name="password"
             label="Password"
+            inputRef={passwordRef}
             fullWidth
             autoComplete="shipping postal-code"
             variant="outlined"
@@ -74,6 +100,7 @@ export default function AddressForm() {
             id="passwordConfirm"
             name="passwordConfirm"
             label="Confirm Password"
+            inputRef={passwordConfirmRef}
             fullWidth
             autoComplete="shipping country"
             variant="outlined"
@@ -99,3 +126,7 @@ export default function AddressForm() {
     </React.Fragment>
   );
 }
+
+AddressForm.propTypes = {
+  handleNext: PropTypes.func.isRequired,
+};
